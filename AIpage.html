@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Mood Board</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    /* Mood Board */
+    #moodboard {
+      position: relative;
+      width: 80%;
+      max-width: 700px;
+      margin: 20px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #moodboard img {
+      width: 100%;
+      display: none;
+    }
+    #moodboard img.active {
+      display: block;
+    }
+    .controls {
+      margin: 10px;
+    }
+    /* Music Player */
+    #music {
+      margin: 40px auto;
+      width: 80%;
+      max-width: 600px;
+    }
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+    /* Book Carousel */
+    #books {
+      margin: 40px auto;
+      width: 80%;
+      max-width: 500px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .book {
+      display: none;
+    }
+    .book.active {
+      display: block;
+    }
+    .book-title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .book-author {
+      color: #555;
+    }
+    button {
+      padding: 8px 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #0077ff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fcc;
+    }
+  </style>
+</head>
+<body>
+    <nav>
+    <ul>
+       <li><a href="index.html">Home</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="qualifications.html">Qualifications</a></li>
+      <li><a href="service.html">Service</a></li>
+      <li><a href="AIpage.html">AI Page</a></li>
+    </ul>
+  </nav>
+
+  <h1>✨ My Mood Board ✨</h1>
+  <div id="moodboard">
+    <img src="images/pic1.jpg" class="active" alt="Mood 1">
+    <img src="images/pic2.jpg" alt="Mood 2">
+    <img src="images/pic3.jpg" alt="Mood 3">
+  </div>
+  <div class="controls">
+    <button onclick="prevImage()">⟨ Prev</button>
+    <button onclick="nextImage()">Next ⟩</button>
+  </div>
+
+  <h1>🎵 My Playlist 🎵</h1>
+  <div id="music">
+    <p id="track-title">Track 1</p>
+    <audio id="audio-player" controls>
+      <source src="music/song1.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <div class="controls">
+      <button onclick="prevTrack()">⟨ Prev</button>
+      <button onclick="nextTrack()">Next ⟩</button>
+    </div>
+  </div>
+
+  <h1>📚 Book Recommendations 📚</h1>
+  <div id="books">
+    <div class="book active">
+      <p class="book-title">The Midnight Library</p>
+      <p class="book-author">Matt Haig</p>
+    </div>
+    <div class="book">
+      <p class="book-title">Tomorrow, and Tomorrow, and Tomorrow</p>
+      <p class="book-author">Gabrielle Zevin</p>
+    </div>
+    <div class="book">
+      <p class="book-title">Dune</p>
+      <p class="book-author">Frank Herbert</p>
+    </div>
+    <button onclick="prevBook()">⟨ Prev</button>
+    <button onclick="nextBook()">Next ⟩</button>
+  </div>
+
+  <script>
+    // Mood Board Logic
+    let images = document.querySelectorAll('#moodboard img');
+    let currentImg = 0;
+    function showImage(index) {
+      images.forEach((img, i) => img.classList.toggle('active', i === index));
+    }
+    function nextImage() {
+      currentImg = (currentImg + 1) % images.length;
+      showImage(currentImg);
+    }
+    function prevImage() {
+      currentImg = (currentImg - 1 + images.length) % images.length;
+      showImage(currentImg);
+    }
+    setInterval(nextImage, 4000); // auto-cycle every 4s
+
+    // Music Playlist Logic
+    const tracks = [
+      { title: "Track 1", src: "music/song1.mp3" },
+      { title: "Track 2", src: "music/song2.mp3" },
+      { title: "Track 3", src: "music/song3.mp3" }
+    ];
+    let currentTrack = 0;
+    const audioPlayer = document.getElementById('audio-player');
+    const trackTitle = document.getElementById('track-title');
+
+    function loadTrack(index) {
+      currentTrack = index;
+      audioPlayer.src = tracks[currentTrack].src;
+      trackTitle.textContent = tracks[currentTrack].title;
+      audioPlayer.play();
+    }
+    function nextTrack() {
+      currentTrack = (currentTrack + 1) % tracks.length;
+      loadTrack(currentTrack);
+    }
+    function prevTrack() {
+      currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+      loadTrack(currentTrack);
+    }
+    audioPlayer.addEventListener("ended", nextTrack);
+
+    // Book Carousel Logic
+    let books = document.querySelectorAll('.book');
+    let currentBook = 0;
+    function showBook(index) {
+      books.forEach((book, i) => book.classList.toggle('active', i === index));
+    }
+    function nextBook() {
+      currentBook = (currentBook + 1) % books.length;
+      showBook(currentBook);
+    }
+    function prevBook() {
+      currentBook = (currentBook - 1 + books.length) % books.length;
+      showBook(currentBook);
+    }
+  </script>
+
+</body>
+</html>
